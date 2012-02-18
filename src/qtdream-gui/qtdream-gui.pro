@@ -24,7 +24,3 @@ HEADERS  += qtdream.h \
 FORMS    += qtdream.ui \
     dreamboxmanagementwidget.ui \
     configurationdialog.ui
-
-
-
-

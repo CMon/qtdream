@@ -25,7 +25,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QLineEdit" name="lineEdit"/>
+       <widget class="QLineEdit" name="leDevice"/>
       </item>
       <item>
        <spacer name="horizontalSpacer_2">
@@ -83,16 +83,40 @@
           <property name="orientation">
            <enum>Qt::Horizontal</enum>
           </property>
-          <widget class="MediaVideoWidget" name="vwDreambox" native="true">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-             <horstretch>1</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
+          <widget class="QWidget" name="layoutWidget">
+           <layout class="QVBoxLayout" name="verticalLayout" stretch="1,0">
+            <item>
+             <widget class="MediaVideoWidget" name="vwDreambox" native="true">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                <horstretch>1</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,1">
+              <item>
+               <widget class="QLabel" name="label">
+                <property name="text">
+                 <string>Currently Playing: </string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="lblCurrentlyPlaying">
+                <property name="text">
+                 <string>Nothing</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+           </layout>
           </widget>
           <widget class="QWidget" name="verticalLayoutWidget">
-           <layout class="QVBoxLayout" name="verticalLayout">
+           <layout class="QVBoxLayout" name="verticalLayout_2">
             <item>
              <widget class="QPushButton" name="pbRefreshBouquets">
               <property name="text">
@@ -128,7 +152,7 @@
              </widget>
             </item>
             <item>
-             <layout class="QHBoxLayout" name="horizontalLayout">
+             <layout class="QHBoxLayout" name="horizontalLayout_3">
               <item>
                <widget class="QPushButton" name="pbWatch">
                 <property name="text">
@@ -158,7 +182,7 @@
               </property>
               <layout class="QGridLayout" name="gridLayout">
                <item row="0" column="0">
-                <widget class="QLabel" name="label">
+                <widget class="QLabel" name="label_2">
                  <property name="text">
                   <string>Local</string>
                  </property>
@@ -168,7 +192,7 @@
                 <widget class="Phonon::VolumeSlider" name="vsLocalVolume"/>
                </item>
                <item row="1" column="0">
-                <widget class="QLabel" name="label_2">
+                <widget class="QLabel" name="label_4">
                  <property name="text">
                   <string>Dreambox</string>
                  </property>
@@ -185,7 +209,7 @@
               <property name="title">
                <string>Channel Details</string>
               </property>
-              <layout class="QVBoxLayout" name="verticalLayout_2">
+              <layout class="QVBoxLayout" name="verticalLayout_5">
                <item>
                 <widget class="QLabel" name="lblCurrentSender">
                  <property name="font">
@@ -229,7 +253,7 @@
      <x>0</x>
      <y>0</y>
      <width>990</width>
-     <height>25</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_File">
@@ -238,16 +262,11 @@
     </property>
     <addaction name="action_Connect"/>
     <addaction name="separator"/>
+    <addaction name="aConfiguration"/>
+    <addaction name="separator"/>
     <addaction name="action_Quit"/>
    </widget>
-   <widget class="QMenu" name="menu_Tools">
-    <property name="title">
-     <string>&amp;Tools</string>
-    </property>
-    <addaction name="aConfiguration"/>
-   </widget>
    <addaction name="menu_File"/>
-   <addaction name="menu_Tools"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <attribute name="toolBarArea">

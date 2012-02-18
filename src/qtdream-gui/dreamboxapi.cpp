@@ -33,13 +33,18 @@ DreamboxApi::DreamboxApi(const QString & host, int port, int streamPort, QObject
     QObject(parent),
     manager (new QNetworkAccessManager(this))
 {
-    requestBase_ = "http://" + host + ":" + QString::number(port) + "/web/";
-    streamBase_ = "http://" + host + ":" + QString::number(streamPort) + "/";
+    setConnectionInfos(host, port, streamPort);
 }
 
 DreamboxApi::~DreamboxApi ()
 {
     delete manager;
+}
+
+void DreamboxApi::setConnectionInfos(const QString & host, int port, int streamPort)
+{
+    requestBase_ = "http://" + host + ":" + QString::number(port) + "/web/";
+    streamBase_ = "http://" + host + ":" + QString::number(streamPort) + "/";
 }
 
 void DreamboxApi::requestGeneralBoxInfo() const

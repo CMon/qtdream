@@ -5,6 +5,8 @@
 
 #include "ui_qtdream.h"
 
+#include <QTimer>
+
 namespace {
 
 int bRefRole = Qt::UserRole + 1;
@@ -18,7 +20,7 @@ bool lessEnigma2Event(const DreamboxApi::Enigma2Event & lhs, const DreamboxApi::
 
 QtDream::QtDream(QWidget *parent) :
     QMainWindow(parent),
-    dBox_("192.168.111.27", 80, 8001, this),
+    dBox_("192.168.1.34", 80, 8001, this),
     audioOutput_(Phonon::VideoCategory),
     ui(new Ui::QDream)
 {
@@ -26,8 +28,11 @@ QtDream::QtDream(QWidget *parent) :
     ui->vsLocalVolume->setAudioOutput(&audioOutput_);
 
     connect(ui->action_Quit, SIGNAL(triggered()), this, SLOT(close()));
+    connect(ui->action_Configuration, SIGNAL(triggered()), this, SLOT(on_aConfiguration_triggered()));
     connect(ui->pbRefreshBouquets, SIGNAL(clicked()), &dBox_, SLOT(requestBouquets()));
     connect(ui->twBouquets, SIGNAL(itemActivated(QTreeWidgetItem*,int)), this, SLOT(senderSelected(QTreeWidgetItem*)));
+    connect(ui->twBouquets, SIGNAL(itemClicked(QTreeWidgetItem*,int)), this, SLOT(senderSelected(QTreeWidgetItem*)));
+    connect(ui->twBouquets, SIGNAL(itemChanged(QTreeWidgetItem*,int)), this, SLOT(senderSelected(QTreeWidgetItem*)));
 
     connect(&dBox_, SIGNAL(newBouquets(QList<DreamboxApi::Enigma2Service>)), this, SLOT(updateBouquets(QList<DreamboxApi::Enigma2Service>)));
     connect(&dBox_, SIGNAL(newSenders(QString,QList<DreamboxApi::Enigma2Service>)), this, SLOT(updateSenders(QString,QList<DreamboxApi::Enigma2Service>)));
@@ -39,6 +44,11 @@ QtDream::QtDream(QWidget *parent) :
 
     DreamboxManagementWidget * dmw = new DreamboxManagementWidget(this);
     ui->tabWidget->addTab(dmw, "Dreambox Management");
+
+    QTimer * updateSenderTimer = new QTimer(this);
+    updateSenderTimer->setInterval(30 * 1000);
+    updateSenderTimer->setSingleShot(false);
+    connect(updateSenderTimer, SIGNAL(timeout()), this, SLOT(checkForUpdatedServiceData()));
 }
 
 QtDream::~QtDream()
@@ -126,6 +136,13 @@ void QtDream::updateEPGs(const QString & reference, const QList<DreamboxApi::Eni
     }
 }
 
+void QtDream::updateCurrentlyPlaying(const QString &reference)
+{
+    // TODO connect it to the actual signal from the dbox api and then be sure to call it at the right times (start, regular basis and change)
+    if (!services_.contains(reference)) return;
+    ui->lblCurrentSender->setText(services_[reference].serviceName + " " + services_[reference].events.first().title);
+}
+
 void QtDream::on_pbWatch_clicked()
 {
     dBox_.requestStreamingUrl(ui->twBouquets->currentItem()->data(0, bRefRole).toString());
@@ -151,9 +168,19 @@ void QtDream::on_aConfiguration_triggered()
 {
     ConfigurationDialog cDialog(this);
 
-    cDialog.show();
+    cDialog.exec();
 }
 
 void QtDream::on_pbSwitchDevice_clicked()
 {
+    if (ui->leDevice->text().isEmpty()) return;
+    // @TODO: sanity Check if ip or hostname
+    dBox_.setConnectionInfos(ui->leDevice->text());
+}
+
+void QtDream::checkForUpdatedServiceData()
+{
+    /// @TODO
+    // here we check if one of the services in services_ has old data
+    // for example currently playing stuff which is already through
 }

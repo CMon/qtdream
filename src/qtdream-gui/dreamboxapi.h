@@ -13,6 +13,8 @@ public:
     explicit DreamboxApi(const QString & host, int port = 80, int streamPort = 8001, QObject *parent = 0);
     ~DreamboxApi ();
 
+    void setConnectionInfos(const QString & host, int port = 80, int streamPort = 8001);
+
     class Enigma2Service
     {
     public:

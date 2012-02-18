@@ -36,6 +36,7 @@ private slots:
     void updateBouquets(const QList<DreamboxApi::Enigma2Service> & bouquets);
     void updateSenders(const QString & bouquet, const QList<DreamboxApi::Enigma2Service> & senders);
     void updateEPGs(const QString & reference, const QList<DreamboxApi::Enigma2Event> & epgs);
+    void updateCurrentlyPlaying(const QString & reference);
 
     void onDBoxStreamingUrl(const QString & url);
 
@@ -46,6 +47,8 @@ private slots:
     void on_aConfiguration_triggered();
 
     void on_pbSwitchDevice_clicked();
+
+    void checkForUpdatedServiceData();
 
 private:
     QHash<QString /*service reference*/, ServiceData>  services_;

@@ -1,5 +1,4 @@
 # CONFIG += release
 CONFIG += debug
 
-CONFIG += all
-
+CONFIG += gui

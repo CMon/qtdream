@@ -20,6 +20,9 @@ static log4cpp::Category & LogCategory = log4cpp::Category::getInstance("Categor
 #define LOG_INFO   Log(log4cpp::Priority::INFO,   false)
 #define LOG_DEBUG  Log(log4cpp::Priority::DEBUG,  false)
 
+// TODO: create this one
+//#define LOG_DEBUG_FUNCTION ScopedFunctionLogger()
+
 class Log
 {
 public:

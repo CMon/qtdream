@@ -10,7 +10,7 @@
 #include <QXmlQuery>
 #include <QXmlResultItems>
 
-#include "ui_configuration.h"
+#include "ui_configurationdialog.h"
 
 namespace {
 
@@ -58,6 +58,7 @@ void ConfigurationDialog::storeConfiguration()
         LOG_ERROR("could not open file: %1", xmlFile_);
         return;
     }
+    LOG_INFO("storing boxfile: %1 and groups: %2", boxesFile_, groupNames_.join(", "));
 
     QXmlStreamWriter* xmlWriter = new QXmlStreamWriter();
     xmlWriter->setDevice(&file);
@@ -100,13 +101,13 @@ void ConfigurationDialog::loadConfiguration()
     QXmlItem item(result.next());
     while (!item.isNull()) {
         query.setFocus(item);
-        QString groupName = evaluateItem(query, "name", false);
+        QString groupName = evaluateItem(query, "name");
         if (!groupName.isEmpty()) {
             groupNames_ << groupName;
         }
         item = result.next();
     }
-    boxesFile_ = evaluateItem(query, "/configuration/boxesFile", false);
+    boxesFile_ = evaluateItem(query, "/configuration/boxesFile");
 
     // set ui elements
     ui->leBoxesFile->setText(boxesFile_);
@@ -121,8 +122,6 @@ void ConfigurationDialog::loadConfiguration()
 
 void ConfigurationDialog::accept()
 {
-    storeConfiguration();
-
     boxesFile_ = ui->leBoxesFile->text();
     groupNames_.clear();
     for(int i = 0; i < ui->twDreamboxes->topLevelItemCount(); ++i) {
@@ -130,6 +129,8 @@ void ConfigurationDialog::accept()
         if (name.isEmpty()) continue;
         groupNames_ << name;
     }
+
+    storeConfiguration();
 
     QDialog::accept();
 }
@@ -142,6 +143,7 @@ void ConfigurationDialog::on_pbAddGroupname_clicked()
     item->setText(0, ui->leGroupname->text());
 
     ui->twDreamboxes->addTopLevelItem(item);
+    ui->leGroupname->clear();
 }
 
 void ConfigurationDialog::on_pbRemoveSelected_clicked()

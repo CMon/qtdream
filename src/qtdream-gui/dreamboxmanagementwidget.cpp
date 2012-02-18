@@ -160,7 +160,7 @@ void DreamboxManagementWidget::on_pbCancel_clicked()
     setSelectedBox(boxId);
 }
 
-void DreamboxManagementWidget::on_pbConnect_clicked()
+void DreamboxManagementWidget::on_pbConnectSSH_clicked()
 {
     const QString boxId = ui->lblId->text();
     if (boxId.isEmpty()) return;
