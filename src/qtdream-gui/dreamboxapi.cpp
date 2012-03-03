@@ -1,5 +1,7 @@
 #include "dreamboxapi.h"
 
+#include <qtdream-gui/log.h>
+
 #include <QBuffer>
 #include <QNetworkRequest>
 #include <QtXml>
@@ -367,6 +369,7 @@ void DreamboxApi::currentChannel()
         break;
     }
 
+    LOG_DEBUG("Current Channel: %1", reference);
     emit currentChannel(reference);
 }
 
@@ -384,6 +387,7 @@ void DreamboxApi::currentStreamingUrl()
         }
     }
 
+    LOG_DEBUG("Current Streaming url: %1", url);
     if (!url.isEmpty()) emit streamingUrl(url);
 }
 

@@ -152,6 +152,7 @@ void QtDream::onDBoxStreamingUrl(const QString & url)
 {
     setWindowTitle(url);
 
+    LOG_DEBUG("Start playback of %1", url);
     mediaObject_.stop();
     mediaObject_.setCurrentSource(Phonon::MediaSource(QUrl::fromEncoded(url.toUtf8())));
     mediaObject_.play();
