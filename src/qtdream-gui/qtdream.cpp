@@ -41,6 +41,7 @@ QtDream::QtDream(QWidget *parent) :
 
     audioOutputPath_ = Phonon::createPath(&mediaObject_, &audioOutput_);
     Phonon::createPath(&mediaObject_, ui->vwDreambox);
+    connect(&mediaObject_, SIGNAL(stateChanged(Phonon::State,Phonon::State)), this, SLOT(stateChanged(Phonon::State,Phonon::State)));
 
     DreamboxManagementWidget * dmw = new DreamboxManagementWidget(this);
     ui->tabWidget->addTab(dmw, "Dreambox Management");
@@ -181,7 +182,18 @@ void QtDream::on_pbSwitchDevice_clicked()
 
 void QtDream::checkForUpdatedServiceData()
 {
+    LOG_DEBUG_FUNCTION;
+    LOG_DEBUG("This method has to be implemented");
     /// @TODO
     // here we check if one of the services in services_ has old data
     // for example currently playing stuff which is already through
+}
+
+void QtDream::stateChanged(Phonon::State newState, Phonon::State oldState)
+{
+    switch(newState) {
+        case Phonon::ErrorState:
+            LOG_ERROR("An error occured: %1", mediaObject_.errorString());
+            break;
+    }
 }

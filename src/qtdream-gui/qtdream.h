@@ -50,6 +50,8 @@ private slots:
 
     void checkForUpdatedServiceData();
 
+    void stateChanged(Phonon::State newState, Phonon::State oldState);
+
 private:
     QHash<QString /*service reference*/, ServiceData>  services_;
     DreamboxApi dBox_;
