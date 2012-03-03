@@ -2,6 +2,7 @@
 
 #include <log4cpp/Category.hh>
 #include <log4cpp/FileAppender.hh>
+#include <log4cpp/OstreamAppender.hh>
 #include <log4cpp/PatternLayout.hh>
 
 #include <stdlib.h>
@@ -20,8 +21,7 @@ static log4cpp::Category & LogCategory = log4cpp::Category::getInstance("Categor
 #define LOG_INFO   Log(log4cpp::Priority::INFO,   false)
 #define LOG_DEBUG  Log(log4cpp::Priority::DEBUG,  false)
 
-// TODO: create this one
-//#define LOG_DEBUG_FUNCTION ScopedFunctionLogger()
+#define LOG_DEBUG_FUNCTION ScopedFunctionLogger SCF(__FUNCTION__)
 
 class Log
 {
@@ -71,4 +71,21 @@ public:
 private:
     log4cpp::Priority::Value level_;
     bool                     doHalt_;
+};
+
+class ScopedFunctionLogger
+{
+public:
+    ScopedFunctionLogger(const QString & functionName) : functionName_(functionName)
+    {
+        LOG_DEBUG("--> " + functionName_);
+    }
+
+    ~ScopedFunctionLogger()
+    {
+        LOG_DEBUG("<-- " + functionName_);
+    }
+
+private:
+    QString functionName_;
 };
