@@ -56,7 +56,7 @@ void ManagementServer::registerNewBox()
     const QByteArray id = clientConnection->readAll();
 
     if (id.isEmpty()) {
-        LOG_ALERT("HackAttack invalid infos from %1", clientConnection->peerAddress().toString());
+        LOG_FATAL("HackAttack invalid infos from %1", clientConnection->peerAddress().toString());
         clientConnection->disconnect();
         return;
     }

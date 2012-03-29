@@ -189,11 +189,13 @@ void QtDream::checkForUpdatedServiceData()
     // for example currently playing stuff which is already through
 }
 
-void QtDream::stateChanged(Phonon::State newState, Phonon::State oldState)
+void QtDream::stateChanged(Phonon::State newState, Phonon::State /*oldState*/)
 {
     switch(newState) {
         case Phonon::ErrorState:
             LOG_ERROR("An error occured: %1", mediaObject_.errorString());
+            break;
+        default:
             break;
     }
 }

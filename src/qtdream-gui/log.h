@@ -1,76 +1,80 @@
 #pragma once
 
-#include <log4cpp/Category.hh>
-#include <log4cpp/FileAppender.hh>
-#include <log4cpp/OstreamAppender.hh>
-#include <log4cpp/PatternLayout.hh>
-
 #include <stdlib.h>
-
+#include <QDesktopServices>
+#include <QDir>
 #include <QString>
+#include <QDateTime>
 
-static log4cpp::Category & LogCategory = log4cpp::Category::getInstance("Category");
+#include <qdebug.h>
 
-#define LOG_EMERG  Log(log4cpp::Priority::EMERG,  true)
-#define LOG_FATAL  Log(log4cpp::Priority::FATAL,  true)
-#define LOG_ALERT  Log(log4cpp::Priority::ALERT,  false)
-#define LOG_CRIT   Log(log4cpp::Priority::CRIT,   false)
-#define LOG_ERROR  Log(log4cpp::Priority::ERROR,  false)
-#define LOG_WARN   Log(log4cpp::Priority::WARN,   false)
-#define LOG_NOTICE Log(log4cpp::Priority::NOTICE, false)
-#define LOG_INFO   Log(log4cpp::Priority::INFO,   false)
-#define LOG_DEBUG  Log(log4cpp::Priority::DEBUG,  false)
+#define LOG_FATAL  Log(5, true,  __FILE__, __LINE__)
+#define LOG_ERROR  Log(4, false, __FILE__, __LINE__)
+#define LOG_WARN   Log(3, false, __FILE__, __LINE__)
+#define LOG_NOTICE Log(2, false, __FILE__, __LINE__)
+#define LOG_INFO   Log(1, false, __FILE__, __LINE__)
+#define LOG_DEBUG  Log(0, false, __FILE__, __LINE__)
 
 #define LOG_DEBUG_FUNCTION ScopedFunctionLogger SCF(__FUNCTION__)
 
 class Log
 {
 public:
-    Log(log4cpp::Priority::Value level, bool doHalt) : level_(level), doHalt_(doHalt) {}
-
-    void operator()(const QString & str) const {
-        LogCategory.log(level_, str.toStdString());
-        if(doHalt_) ::abort();
+    Log(int level, bool doHalt, const char * function, int line) :
+        level_(level),
+        doHalt_(doHalt),
+        file_(function),
+        line_(line)
+    {
     }
 
-    void operator()(const char * str) const {
-        LogCategory.log(level_, str);
+    void operator()(const QString & str) const {
+        logImpl(str);
         if(doHalt_) ::abort();
     }
 
     template<typename T1>
     void operator()(const QString & str, const T1 & t1) const {
-        LogCategory.log(level_, QString(str).arg(t1).toStdString());
+        logImpl(QString(str).arg(t1));
         if(doHalt_) ::abort();
     }
 
     template<typename T1, typename T2>
     void operator()(const QString & str, const T1 &  t1, const T2 & t2) const {
-        LogCategory.log(level_, QString(str).arg(t1).arg(t2).toStdString());
+        logImpl(QString(str).arg(t1).arg(t2));
         if(doHalt_) ::abort();
     }
 
     template<typename T1, typename T2, typename T3>
     void operator()(const QString & str, const T1 &  t1, const T2 & t2, const T3 & t3) const {
-        LogCategory.log(level_, QString(str).arg(t1).arg(t2).arg(t3).toStdString());
+        logImpl(QString(str).arg(t1).arg(t2).arg(t3));
         if(doHalt_) ::abort();
     }
 
     template<typename T1, typename T2, typename T3, typename T4>
     void operator()(const QString & str, const T1 &  t1, const T2 & t2, const T3 & t3, const T4 & t4) const {
-        LogCategory.log(level_, QString(str).arg(t1).arg(t2).arg(t3).arg(t4).toStdString());
+        logImpl(QString(str).arg(t1).arg(t2).arg(t3).arg(t4));
         if(doHalt_) ::abort();
     }
 
     template<typename T1, typename T2, typename T3, typename T4, typename T5>
     void operator()(const QString & str, const T1 &  t1, const T2 & t2, const T3 & t3, const T4 & t4, const T5 & t5) const {
-        LogCategory.log(level_, QString(str).arg(t1).arg(t2).arg(t3).arg(t4).arg(t5).toStdString());
+        logImpl(QString(str).arg(t1).arg(t2).arg(t3).arg(t4).arg(t5));
         if(doHalt_) ::abort();
     }
 
 private:
-    log4cpp::Priority::Value level_;
-    bool                     doHalt_;
+    void logImpl(const QString & message) const
+    {
+        qDebug() << QDateTime::currentDateTime().toString(Qt::ISODate) << " " << level_ << " " << file_ << ":" << line_ << " "
+                  << message;
+    }
+
+private:
+    int     level_;
+    bool    doHalt_;
+    QString file_;
+    int     line_;
 };
 
 class ScopedFunctionLogger
@@ -78,12 +82,12 @@ class ScopedFunctionLogger
 public:
     ScopedFunctionLogger(const QString & functionName) : functionName_(functionName)
     {
-        LOG_DEBUG("--> " + functionName_);
+        LOG_DEBUG("--> %1" + functionName_);
     }
 
     ~ScopedFunctionLogger()
     {
-        LOG_DEBUG("<-- " + functionName_);
+        LOG_DEBUG("<-- %1" + functionName_);
     }
 
 private:

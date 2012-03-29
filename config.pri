@@ -53,6 +53,3 @@ QMAKE_DISTCLEAN += $${QTDREAM_ROOT}/libs/debug/*
 QMAKE_DISTCLEAN += $${QTDREAM_ROOT}/libs/release/*
 QMAKE_DISTCLEAN += $${QTDREAM_ROOT}/bin/debug/*
 QMAKE_DISTCLEAN += $${QTDREAM_ROOT}/bin/release/*
-
-LIBS     += -llog4cpp
-
