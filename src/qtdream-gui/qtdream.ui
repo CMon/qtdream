@@ -188,9 +188,6 @@
                  </property>
                 </widget>
                </item>
-               <item row="0" column="1">
-                <widget class="Phonon::VolumeSlider" name="vsLocalVolume"/>
-               </item>
                <item row="1" column="0">
                 <widget class="QLabel" name="label_4">
                  <property name="text">
@@ -198,8 +195,19 @@
                  </property>
                 </widget>
                </item>
+               <item row="0" column="1">
+                <widget class="QSlider" name="vsLocalVolume">
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                </widget>
+               </item>
                <item row="1" column="1">
-                <widget class="Phonon::VolumeSlider" name="vsDreamboxVolume"/>
+                <widget class="QSlider" name="vsDreamboxVolume">
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                </widget>
                </item>
               </layout>
              </widget>
@@ -300,11 +308,6 @@
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
-  <customwidget>
-   <class>Phonon::VolumeSlider</class>
-   <extends>QWidget</extends>
-   <header location="global">phonon/volumeslider.h</header>
-  </customwidget>
   <customwidget>
    <class>MediaVideoWidget</class>
    <extends>QWidget</extends>

@@ -1,6 +1,6 @@
 !include(../../config.pri):error("base config file (config.pri) not available")
 
-QT       += core gui phonon network xml xmlpatterns
+QT       += core gui network xml xmlpatterns
 
 TARGET = QtDream
 TEMPLATE = app
@@ -24,3 +24,13 @@ HEADERS  += qtdream.h \
 FORMS    += qtdream.ui \
     dreamboxmanagementwidget.ui \
     configurationdialog.ui
+
+# VLC > 1.2 needed
+LIBS += -lvlc
+macx {
+	message("Building for mac")
+	INCLUDEPATH += /Applications/VLC.app/Contents/MacOS/include
+	LIBS += -L/Applications/VLC.app/Contents/MacOS/lib/
+} else {
+	message("You need to add the lib path to VLCLib")
+}

@@ -3,8 +3,6 @@
 #include <qtdream-gui/dreamboxapi.h>
 #include <qtdream-gui/dreamboxmanagementwidget.h>
 
-#include <Phonon/AudioOutput>
-#include <Phonon/MediaObject>
 #include <QtGui/QMainWindow>
 
 class QTreeWidgetItem;
@@ -50,14 +48,9 @@ private slots:
 
     void checkForUpdatedServiceData();
 
-    void stateChanged(Phonon::State newState, Phonon::State oldState);
-
 private:
     QHash<QString /*service reference*/, ServiceData>  services_;
     DreamboxApi dBox_;
-    Phonon::MediaObject  mediaObject_;
-    Phonon::AudioOutput  audioOutput_;
-    Phonon::Path         audioOutputPath_;
 
 private:
     QSharedPointer<Ui::QDream> ui;

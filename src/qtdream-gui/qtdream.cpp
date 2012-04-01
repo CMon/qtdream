@@ -21,11 +21,9 @@ bool lessEnigma2Event(const DreamboxApi::Enigma2Event & lhs, const DreamboxApi::
 QtDream::QtDream(QWidget *parent) :
     QMainWindow(parent),
     dBox_("192.168.1.34", 80, 8001, this),
-    audioOutput_(Phonon::VideoCategory),
     ui(new Ui::QDream)
 {
     ui->setupUi(this);
-    ui->vsLocalVolume->setAudioOutput(&audioOutput_);
 
     connect(ui->action_Quit, SIGNAL(triggered()), this, SLOT(close()));
     connect(ui->action_Configuration, SIGNAL(triggered()), this, SLOT(on_aConfiguration_triggered()));
@@ -38,10 +36,6 @@ QtDream::QtDream(QWidget *parent) :
     connect(&dBox_, SIGNAL(newSenders(QString,QList<DreamboxApi::Enigma2Service>)), this, SLOT(updateSenders(QString,QList<DreamboxApi::Enigma2Service>)));
     connect(&dBox_, SIGNAL(updateEPGs(QString,QList<DreamboxApi::Enigma2Event>)), this, SLOT(updateEPGs(QString,QList<DreamboxApi::Enigma2Event>)));
     connect(&dBox_, SIGNAL(streamingUrl(QString)), this, SLOT(onDBoxStreamingUrl(QString)));
-
-    audioOutputPath_ = Phonon::createPath(&mediaObject_, &audioOutput_);
-    Phonon::createPath(&mediaObject_, ui->vwDreambox);
-    connect(&mediaObject_, SIGNAL(stateChanged(Phonon::State,Phonon::State)), this, SLOT(stateChanged(Phonon::State,Phonon::State)));
 
     DreamboxManagementWidget * dmw = new DreamboxManagementWidget(this);
     ui->tabWidget->addTab(dmw, "Dreambox Management");
@@ -154,11 +148,7 @@ void QtDream::on_pbWatch_clicked()
 void QtDream::onDBoxStreamingUrl(const QString & url)
 {
     setWindowTitle(url);
-
-    LOG_DEBUG("Start playback of %1", url);
-    mediaObject_.stop();
-    mediaObject_.setCurrentSource(Phonon::MediaSource(QUrl::fromEncoded(url.toUtf8())));
-    mediaObject_.play();
+    ui->vwDreambox->playback(url);
 }
 
 void QtDream::senderSelected(QTreeWidgetItem * item)
@@ -189,15 +179,4 @@ void QtDream::checkForUpdatedServiceData()
     /// @TODO
     // here we check if one of the services in services_ has old data
     // for example currently playing stuff which is already through
-}
-
-void QtDream::stateChanged(Phonon::State newState, Phonon::State /*oldState*/)
-{
-    switch(newState) {
-        case Phonon::ErrorState:
-            LOG_ERROR("An error occured: %1", mediaObject_.errorString());
-            break;
-        default:
-            break;
-    }
 }
