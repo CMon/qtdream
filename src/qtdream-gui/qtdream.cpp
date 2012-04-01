@@ -59,6 +59,7 @@ QtDream::~QtDream()
 
 void QtDream::updateBouquets(const QList<DreamboxApi::Enigma2Service> & bouquets)
 {
+    LOG_DEBUG_FUNCTION;
     foreach (const DreamboxApi::Enigma2Service & bouquet, bouquets) {
         if (services_.contains(bouquet.reference)) {
             // update
@@ -82,6 +83,7 @@ void QtDream::updateBouquets(const QList<DreamboxApi::Enigma2Service> & bouquets
 
 void QtDream::updateSenders(const QString & bouquet, const QList<DreamboxApi::Enigma2Service> & senders)
 {
+    LOG_DEBUG_FUNCTION;
     foreach (const DreamboxApi::Enigma2Service & sender, senders) {
 
         if (services_.contains(sender.reference)) {

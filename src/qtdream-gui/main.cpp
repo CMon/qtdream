@@ -14,7 +14,7 @@ int main(int argc, char *argv[])
     QtDream w;
     w.show();
 
-    LOG_NOTICE("Started qtdream");
+    LOG_NOTICE("Started " + QApplication::applicationName());
 
     return a.exec();
 }

@@ -126,6 +126,7 @@ void DreamboxApi::changeVolume(const QString & command) const
 
 void DreamboxApi::requestBouquets() const
 {
+    LOG_DEBUG_FUNCTION;
     QNetworkRequest request;
     request.setUrl(QUrl(requestBase_ + "getservices"));
 

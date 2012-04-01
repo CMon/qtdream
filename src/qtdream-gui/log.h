@@ -1,10 +1,14 @@
 #pragma once
 
-#include <stdlib.h>
+#include <libgen.h>
+
 #include <QDesktopServices>
 #include <QDir>
 #include <QString>
 #include <QDateTime>
+#include <QDesktopServices>
+#include <QApplication>
+#include <QThread>
 
 #include <qdebug.h>
 
@@ -66,8 +70,13 @@ public:
 private:
     void logImpl(const QString & message) const
     {
-        qDebug() << QDateTime::currentDateTime().toString(Qt::ISODate) << " " << level_ << " " << file_ << ":" << line_ << " "
-                  << message;
+        qWarning("%s %d %30s:%-6d %ld: %s",
+                 qPrintable(QDateTime::currentDateTime().toString(Qt::ISODate)),
+                 level_,
+                 basename((char *)qPrintable(file_)),
+                 line_,
+                 (unsigned long) QThread::currentThreadId(),
+                 qPrintable(message));
     }
 
 private:
@@ -82,12 +91,12 @@ class ScopedFunctionLogger
 public:
     ScopedFunctionLogger(const QString & functionName) : functionName_(functionName)
     {
-        LOG_DEBUG("--> %1" + functionName_);
+        LOG_DEBUG("--> " + functionName_);
     }
 
     ~ScopedFunctionLogger()
     {
-        LOG_DEBUG("<-- %1" + functionName_);
+        LOG_DEBUG("<-- " + functionName_);
     }
 
 private:
